@@ -1,0 +1,13 @@
+<?php
+// src/Controller/ArticlesController.php
+
+namespace App\Controller;
+
+class HomeController extends AppController
+{
+    public function index()
+    {
+        parent::initialize();
+        $this->set('titulo', 'Comunidad');
+    }
+}

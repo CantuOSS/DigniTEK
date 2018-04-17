@@ -1,0 +1,1 @@
+<table class="table" data-paging="true" data-filtering="true"></table>                       
