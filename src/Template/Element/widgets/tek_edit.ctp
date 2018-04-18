@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">Datos del TEK</div>
   <div class="panel-body">
-    <?= $this->Form->create($tek) ?>
+    <?= $this->Form->create($tek, ['type' => 'file', 'id' => 'formarch']) ?>
     <?php
         $this->Form->setTemplates([
             'input' => '<input type="{{type}}" name="{{name}}"{{attrs}} class="form-control"/>',
@@ -18,8 +18,8 @@
             <?php echo $this->Form->textarea('descripcion');?>
         </div>                     
         <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
-        </div>           
+            <?php echo $this->Form->input('image_path[]', ['type' => 'file', 'multiple' => 'false', 'label' => 'Imagen del TEK']);?>
+        </div>          
         <?php echo $this->Form->button(__('Guardar'));?>
     <?php echo $this->Form->end();?>
   </div>

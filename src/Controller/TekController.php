@@ -32,7 +32,7 @@ class TekController extends AppController
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
-        $this->Auth->allow(['listatek']);
+        $this->Auth->allow(['listatek', 'medios']);
     }      
 
     public function listatek(){
@@ -52,16 +52,64 @@ class TekController extends AppController
         //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navTek');
         $tek = $this->Tek->newEntity(); 
-        if ($this->request->is(['post', 'put'])) {            
-            $tek->usuario_comunidad_idcomunidad = "1";
-            $tek->usuario_idusuario = "1";
-            $tek->categoria_tek_idcategoria_tek = "1";
-            $this->Tek->patchEntity($tek, $this->request->getData());
-            if ($this->Tek->save($tek)) {
-                $this->Flash->success(__('Tek creado.'));
-                return $this->redirect(['action' => 'index']);
+        if ($this->request->is(['post', 'put'])) {      
+            if (!empty($this->request->getData())) {      
+                $tek->usuario_comunidad_idcomunidad = "1";
+                $tek->usuario_idusuario = $this->Auth->user('idusuario');;
+                $tek->categoria_tek_idcategoria_tek = "1";                 
+                if(!empty($this->request->getData()['image_path'][0]['name']))
+                {
+                    $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
+                    $tek->imagen = "portada." . $ext;
+                }
+
+                $this->Tek->patchEntity($tek, $this->request->getData());
+                if ($this->Tek->save($tek)) {
+
+
+                    if(!empty($this->request->getData()['image_path'][0]['name']))
+                    {
+                        $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
+    
+                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+    
+                        //only process if the extension is valid
+                        if(in_array($ext, $arr_ext))
+                        {
+                            //name image to saved in database
+                            //$employee['product_image'] = $file['name'];
+    
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
+                            mkdir($dir, 0755, true);
+                            array_map('unlink', glob($dir . "portada.*"));                        
+    
+                            //do the actual uploading of the file. First arg is the tmp name, second arg is
+                            //where we are putting it
+                            if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
+                            {
+                                $this -> Flash -> error(__('Image could not be saved. Please, try again.'));
+    
+                                //return $this->redirect(['action' => 'edit']);
+                            } else {                            
+                                //$this->Comunidad->save($comunidad);
+                                $this->Flash->error(__('Archivo subido'));
+                                //return $this->redirect(['action' => 'edit']);
+                            }
+    
+                        } else {
+                            $this->Flash->error(__('Extension no valida'));
+                            //return $this->redirect(['action' => 'edit']);                    
+                        }
+                    } 
+
+                    $this->Flash->success(__('Tek creado.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('Error al crear TEK.'));
+                }
             }
-            $this->Flash->error(__('Error al crear TEK.'));
         } else {            
             $this->set('tek', $tek); 
         }
@@ -83,6 +131,26 @@ class TekController extends AppController
         }               
 
         $this->set('tek', $tek);        
+    } 
+    
+    public function medios($idtek = null){
+        if ($idtek != null){
+            $tek = $this->Tek->get($idtek);
+            $medios = array();     
+            $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'tek/' . $idtek . '/';
+            $temp = new \stdClass();
+            $temp->image = array("src" => $dir . $tek->imagen, "poster" => $dir . $tek->imagen);
+            array_push($medios, $temp);                   
+            /*foreach ($comunidad as $row){
+                $temp = new \stdClass();
+                $temp->image = array("src" => $row->imagen, "poster" => $row->imagen);
+                array_push($medios, $temp);
+            }*/
+            $responseResult = json_encode($medios);
+            $this->response->type('json');
+            $this->response->body($responseResult);
+            return $this->response;        
+        }
     }    
 
     public function isAuthorized($user) {
