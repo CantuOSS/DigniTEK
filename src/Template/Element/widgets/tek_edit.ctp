@@ -14,6 +14,9 @@
             <?php echo $this->Form->input('nombre');?>
         </div>
         <div class="form-group">
+            <?= $this->Form->input('categoria_tek_idcategoria_tek', ['type' => 'select', 'options' => $categorias, 'empty' => __('Selecciona una categoria'), 'label' => false, 'default' => $tek->categoria_tek_idcategoria_tek]) ?>
+        </div>        
+        <div class="form-group">
             <label for="descripcion">Descripcion</label>
             <?php echo $this->Form->textarea('descripcion');?>
         </div>                     

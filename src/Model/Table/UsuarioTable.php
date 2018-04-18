@@ -10,6 +10,7 @@ class UsuarioTable extends Table
     public function initialize(array $config)
     {
         $this->setPrimaryKey('idusuario');
+        $this->addBehavior('Timestamp');
     }
 
     public function validationDefault(Validator $validator)

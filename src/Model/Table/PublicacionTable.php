@@ -9,5 +9,6 @@ class PublicacionTable extends Table
     public function initialize(array $config)
     {
         $this->setPrimaryKey('idpublicacion');
+        $this->addBehavior('Timestamp');
     }  
 }

@@ -17,7 +17,7 @@
           <?php echo $this->Form->textarea('descripcion');    ?>
         </div>
         <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
+          <?php echo $this->Form->input('categoria', ['default' => $categoria]);    ?>
         </div>          
         <?php echo $this->Form->end();?>
 

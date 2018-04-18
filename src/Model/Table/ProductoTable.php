@@ -9,5 +9,6 @@ class ProductoTable extends Table
     public function initialize(array $config)
     {
         $this->setPrimaryKey('idproducto');
+        $this->addBehavior('Timestamp');
     }  
 }

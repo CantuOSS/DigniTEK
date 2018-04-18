@@ -9,5 +9,6 @@ class EventoTable extends Table
     public function initialize(array $config)
     {
         $this->setPrimaryKey('idevento');
+        $this->addBehavior('Timestamp');
     }  
 }

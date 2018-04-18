@@ -2,7 +2,7 @@
         FooTable.MyFiltering = FooTable.Filtering.extend({
             construct: function(instance){
                 this._super(instance);
-                this.statuses = ['Categoria 1','Categoria 2', 'Categoria 3', 'Categoria 4', 'Categoria 5', 'Categoria 6', 'Categoria 7'];
+                this.statuses = ["Historias orales, tradiciones y leyendas","Ceremonias y costumbres","Discursos cotidianos y oratoria","Sue\u00f1os y visiones","Ense\u00f1anza y aprendizaje experimental","Principios ecol\u00f3gicos e indicadores","Modificacion del entorno","Inventariado y monitoreo","Estrategias de cosecha","Adaptabilidad","Conocimiento del clima y las temporadas","Conocimiento del entorno","Clasificacion y nomenclatura"];
                 this.def = 'Todo';
                 this.$status = null;
             },
@@ -55,8 +55,9 @@
                                     return "";
                             }},                                                
                             {"name":"nombre","title":"Nombre"},
-                            {"name":"descripcion","title":"Descripcion","breakpoints":"xs sm"},                            
-                            {"name":"fecha","title":"Fecha","breakpoints":"xs sm"},
+                            {"name":"descripcion","title":"Descripcion","breakpoints":"xs sm"},   
+                            {"name":"categoria","title":"Categoria","breakpoints":"xs sm"},   
+                            {"name":"modified","title":"Fecha","breakpoints":"xs sm"},
                             {"type": "object","title":"Ver", "name":"detalle", "formatter": function(value){
                                     if (value){                                        
                                         return '<a href= "' + value.enlace + '"  class="btn btn-info" role="button">Ver</a>';

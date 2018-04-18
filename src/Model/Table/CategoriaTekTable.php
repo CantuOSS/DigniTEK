@@ -4,11 +4,11 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class TekTable extends Table
+class CategoriaTekTable extends Table
 {
     public function initialize(array $config)
     {
-        $this->setPrimaryKey('idtek');
-        $this->addBehavior('Timestamp');
+        $this->setPrimaryKey('idcategoria_tek');
+        $this->setDisplayField('nombre');
     }  
 }

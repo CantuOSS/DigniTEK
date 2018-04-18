@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 class TekController extends AppController
 {
@@ -24,6 +25,9 @@ class TekController extends AppController
         $this->set('activo', 'navTek');
         $tek = $this->Tek->get($idtek);
         $this->set('tek', $tek);
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
+        $categoria = $tabla_categorias_tek->get($tek->categoria_tek_idcategoria_tek)->nombre;
+        $this->set('categoria', $categoria);
     }    
 
     public function beforeFilter(Event $event)
@@ -32,14 +36,16 @@ class TekController extends AppController
         // Allow users to register and logout.
         // You should not add the "login" action to allow list. Doing so would
         // cause problems with normal functioning of AuthComponent.
-        $this->Auth->allow(['listatek', 'medios']);
+        $this->Auth->allow(['listatek', 'medios', 'listacategorias']);
     }      
 
     public function listatek(){
         $tek = $this->Tek->find('all');
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         foreach ($tek as $row){
             $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idtek);
             $row->detalle = array('enlace' => 'tek/view/' . $row->idtek);
+            $row->categoria = $tabla_categorias_tek->get($row->categoria_tek_idcategoria_tek)->nombre;
         }
         $responseResult = json_encode($tek);
         $this->response->type('json');
@@ -47,16 +53,34 @@ class TekController extends AppController
         return $this->response;        
     }
 
+    public function listacategorias(){
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
+        $categorias = $tabla_categorias_tek->find('all');
+        $cat_ret = array();
+        foreach ($categorias as $row){
+            array_push($cat_ret, $row->nombre);
+        }        
+        $responseResult = json_encode($cat_ret);
+        $this->response->type('json');
+        $this->response->body($responseResult);
+        return $this->response;          
+    }
+
     public function add()
     {
         //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navTek');
         $tek = $this->Tek->newEntity(); 
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
+        //$categorias = $tabla_categorias_tek->find('all');  
+        $categorias = $tabla_categorias_tek->find('list');      
+        //$tek->categorias = $categorias;
+        $this->set('categorias', $categorias);
         if ($this->request->is(['post', 'put'])) {      
             if (!empty($this->request->getData())) {      
                 $tek->usuario_comunidad_idcomunidad = "1";
                 $tek->usuario_idusuario = $this->Auth->user('idusuario');;
-                $tek->categoria_tek_idcategoria_tek = "1";                 
+                $tek->categoria_tek_idcategoria_tek = $this->request->getData()['idcategoria_tek'];                 
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {
                     $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
@@ -120,7 +144,11 @@ class TekController extends AppController
     {
         $this->set('activo', 'navTek');
         $tek = $this->Tek->get($idtek);
-
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
+        //$categorias = $tabla_categorias_tek->find('all');  
+        $categorias = $tabla_categorias_tek->find('list');      
+        //$tek->categorias = $categorias;
+        $this->set('categorias', $categorias);
         if ($this->request->is(['post', 'put'])) {
             $this->Tek->patchEntity($tek, $this->request->getData());
             if ($this->Tek->save($tek)) {
