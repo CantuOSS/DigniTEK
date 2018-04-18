@@ -50,7 +50,7 @@
                 "columns": [
                             {"type": "object","title":"Imagen", "name":"imagen", "formatter": function(value){
                                     if (value){
-                                        return '<img class="img-fluid" style="height: 100px; width: 100px;" src="/DigniTEK/uploads/files/tek/' + value.id + "/" + value.enlace +'"/>';
+                                        return '<img class="img-fluid" style="height: 150px; width: 300px;" src="/DigniTEK/uploads/files/tek/' + value.id + "/" + value.enlace +'"/>';
                                     }
                                     return "";
                             }},                                                
