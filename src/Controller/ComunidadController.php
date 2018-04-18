@@ -51,7 +51,7 @@ class ComunidadController extends AppController
                         //where we are putting it
                         if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
                         {
-                            $this -> Flash -> error(__('Image could not be saved. Please, try again.'));
+                            $this->Flash->error(__('Image could not be saved. Please, try again.'));
 
                             //return $this->redirect(['action' => 'edit']);
                         } else {

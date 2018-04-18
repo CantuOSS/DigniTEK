@@ -57,7 +57,11 @@
                             {"name":"nombre","title":"Nombre"},
                             {"name":"descripcion","title":"Descripcion","breakpoints":"xs sm"},   
                             {"name":"categoria","title":"Categoria","breakpoints":"xs sm"},   
-                            {"name":"modified","title":"Fecha","breakpoints":"xs sm"},
+                            {"name":"modified","title":"Fecha","breakpoints":"xs sm",
+                            "formatter": function(value){
+                                moment.locale('es'); 
+                                return moment(value).format('MMMM D YYYY - h:mm');}
+                            },
                             {"type": "object","title":"Ver", "name":"detalle", "formatter": function(value){
                                     if (value){                                        
                                         return '<a href= "' + value.enlace + '"  class="btn btn-info" role="button">Ver</a>';

@@ -146,7 +146,7 @@ class TekController extends AppController
         $tek = $this->Tek->get($idtek);
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         $categorias = $tabla_categorias_tek->find('list');      
-        $this->set('categorias', $categorias);
+        $this->set('categorias', $categorias);       
         if ($this->request->is(['post', 'put'])) {
             if (!empty($this->request->getData())) {
 
@@ -156,7 +156,6 @@ class TekController extends AppController
                     $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
                     $tek->imagen = "portada." . $ext;
                 }                
-
                 $this->Tek->patchEntity($tek, $this->request->getData());
                 if ($this->Tek->save($tek)) {
                     if(!empty($this->request->getData()['image_path'][0]['name']))
@@ -180,27 +179,28 @@ class TekController extends AppController
                             //where we are putting it
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
                             {
-                                $this -> Flash -> error(__('Image could not be saved. Please, try again.'));
+                                $this->Flash->error(__('Image could not be saved. Please, try again.'));
     
                                 //return $this->redirect(['action' => 'edit']);
                             } else {                            
                                 //$this->Comunidad->save($comunidad);
                                 $this->Flash->error(__('Archivo subido'));
-                                //return $this->redirect(['action' => 'edit']);
+                                return $this->redirect(['action' => 'view/' . $tek->idtek]);
                             }
     
                         } else {
                             $this->Flash->error(__('Extension no valida'));
-                            //return $this->redirect(['action' => 'edit']);                    
+                            return $this->redirect(['action' => 'view/' . $tek->idtek]);                  
                         }
                     }                     
                     $this->Flash->success(__('TEK actualizado.'));
                     return $this->redirect(['action' => 'view/' . $tek->idtek]);
+                } else {
+                    $this->Flash->error(__('Error al actualizar TEK.'));
+                    return $this->redirect(['action' => 'view/' . $tek->idtek]);
                 }
-                $this->Flash->error(__('Error al actualizar TEK.'));
             }
-        }               
-
+        }           
         $this->set('tek', $tek);        
     } 
     

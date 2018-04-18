@@ -26,6 +26,7 @@ use Cake\ORM\TableRegistry;
  *
  * @link https://book.cakephp.org/3.0/en/controllers.html#the-app-controller
  */
+ob_start();
 class AppController extends Controller
 {
 
@@ -79,7 +80,7 @@ class AppController extends Controller
 
         $usuarioauth = $this->Auth->user('idusuario');
         $nombreusuarioauth = $this->Auth->user('nombre');
-        $this->log('id usuario autentificado: ' . $usuarioauth,'debug');   
+        //$this->log('id usuario autentificado: ' . $usuarioauth,'debug');   
         $this->set('idusuario_nav', $usuarioauth);     
         $this->set('nombreusuario_nav', $nombreusuarioauth);           
 

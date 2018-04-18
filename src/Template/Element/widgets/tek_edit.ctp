@@ -1,7 +1,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">Datos del TEK</div>
   <div class="panel-body">
-    <?= $this->Form->create($tek, ['type' => 'file', 'id' => 'formarch']) ?>
+    <?php echo $this->Form->create($tek, ['type' => 'file', 'id' => 'formarch']) ?>
     <?php
         $this->Form->setTemplates([
             'input' => '<input type="{{type}}" name="{{name}}"{{attrs}} class="form-control"/>',
@@ -14,7 +14,8 @@
             <?php echo $this->Form->input('nombre');?>
         </div>
         <div class="form-group">
-            <?= $this->Form->input('categoria_tek_idcategoria_tek', ['type' => 'select', 'options' => $categorias, 'empty' => __('Selecciona una categoria'), 'label' => false, 'default' => $tek->categoria_tek_idcategoria_tek]) ?>
+            <label for="categoria_tek_idcategoria_tek">Categoria</label>
+            <?php echo $this->Form->input('categoria_tek_idcategoria_tek', ['type' => 'select', 'options' => $categorias, 'empty' => __('Selecciona una categoria'), 'label' => false, 'default' => $tek->categoria_tek_idcategoria_tek]) ?>
         </div>        
         <div class="form-group">
             <label for="descripcion">Descripcion</label>
