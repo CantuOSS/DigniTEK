@@ -4,12 +4,11 @@ namespace App\Model\Table;
 
 use Cake\ORM\Table;
 
-class TekTable extends Table
+class TekHasMultimediaTable extends Table
 {
     public function initialize(array $config)
     {
-        $this->setPrimaryKey('idtek');
-        $this->addBehavior('Timestamp');
+        
     }  
 }
 ?>

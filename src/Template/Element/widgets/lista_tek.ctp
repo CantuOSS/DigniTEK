@@ -1,1 +1,1 @@
-<table class="table" data-paging="true" data-filtering="true"></table>                       
+<table class="table" data-paging="true" data-filtering="true" data-sorting="true"></table>                       

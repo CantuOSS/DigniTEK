@@ -33,11 +33,11 @@
 								</a>
 							<?php } ?>
                         </li>                                          
-                        <li id="navLenguaje">
+                        <!--<li id="navLenguaje">
 							<a href="#">
 								<i class="fa fa-language"></i> <span>Lenguaje: Espanol</span>
 							</a>
-						</li>                         
+						</li>               -->          
                     </ul>
 					<ul class="nav navbar-nav navbar-center">
 						<li id="navComunidad">

@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Tek extends Entity
+class Multimedia extends Entity
 {
     protected $_accessible = [
         '*' => true,

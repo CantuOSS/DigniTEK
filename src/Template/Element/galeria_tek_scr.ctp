@@ -12,7 +12,15 @@
             poster: '<i class="fa fa-youtube-play" style="line-height: 46px;font-size: 20px;"></i>'
         },
         onClick: function () {
-            console.log(this);
+            console.log(this.media.image);
+            console.log(myViewer_0);
+            $.magnificPopup.open({
+            items: {
+                src: this.media.image.src
+            },
+            type: 'image',
+            titleSrc: this.media.image.descripcion
+            });           
         }
     });
 
@@ -22,6 +30,10 @@
             console.log(data);
             myViewer_0.setMediaList(data);
     });
+
+    /*$('div[data-media-viewer-els=viewer]').bind("DOMSubtreeModified",function(){
+        alert('changed');
+    });*/    
 
     /*myViewer_0.setMediaList([
     {

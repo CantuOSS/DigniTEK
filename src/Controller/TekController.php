@@ -28,6 +28,29 @@ class TekController extends AppController
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         $categoria = $tabla_categorias_tek->get($tek->categoria_tek_idcategoria_tek)->nombre;
         $this->set('categoria', $categoria);
+
+        //recopilar y almacenar medios para mostrar
+        $medios = array();     
+        $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'tek/' . $idtek . '/';
+        $temp = $this->Tek->newEntity();
+        $temp->ruta = $dir . $tek->imagen;
+        $temp->descripcion = "Imagen de portada para tek: " . $tek->nombre; 
+        array_push($medios, $temp);           
+        $tabla_multimedia = TableRegistry::get('Multimedia');
+        $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');   
+        $relacion_medios = $tabla_tekhasmultimedia->find('all')->where(['tek_idtek = ' => $tek->idtek]);
+        foreach ($relacion_medios as $rel){
+            $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
+            if (!empty($multimedia)){
+                //$temp = new \stdClass();
+                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
+                //array_push($medios, $temp);
+                $multimedia->ruta = $dir . $multimedia->enlace;
+                array_push($medios, $multimedia);
+            }
+        }
+        $this->set('medios', $medios);        
+        $this->set('editar', false);
     }    
 
     public function beforeFilter(Event $event)
@@ -40,7 +63,7 @@ class TekController extends AppController
     }      
 
     public function listatek(){
-        $tek = $this->Tek->find('all');
+        $tek = $this->Tek->find('all', array('order' => 'modified DESC'));
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         foreach ($tek as $row){
             $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idtek);
@@ -161,29 +184,17 @@ class TekController extends AppController
                     if(!empty($this->request->getData()['image_path'][0]['name']))
                     {
                         $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
-    
                         $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
                         $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
-    
-                        //only process if the extension is valid
                         if(in_array($ext, $arr_ext))
                         {
-                            //name image to saved in database
-                            //$employee['product_image'] = $file['name'];
-    
                             $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
                             mkdir($dir, 0755, true);
                             array_map('unlink', glob($dir . "portada.*"));                        
-    
-                            //do the actual uploading of the file. First arg is the tmp name, second arg is
-                            //where we are putting it
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
                             {
                                 $this->Flash->error(__('Image could not be saved. Please, try again.'));
-    
-                                //return $this->redirect(['action' => 'edit']);
                             } else {                            
-                                //$this->Comunidad->save($comunidad);
                                 $this->Flash->error(__('Archivo subido'));
                                 return $this->redirect(['action' => 'view/' . $tek->idtek]);
                             }
@@ -192,17 +203,97 @@ class TekController extends AppController
                             $this->Flash->error(__('Extension no valida'));
                             return $this->redirect(['action' => 'view/' . $tek->idtek]);                  
                         }
-                    }                     
+                    } 
+                    //cargar medios multimedia xd
+                    if(!empty($this->request->getData()['multimedia']) && count($this->request->getData()['multimedia']) > 0){
+                        $tabla_multimedia = TableRegistry::get('Multimedia');
+                        $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');
+                        foreach ($this->request->getData()['multimedia'] as $adjunto){
+                            $multimedia = $tabla_multimedia->newEntity(); 
+                            $enlace = $tabla_tekhasmultimedia->newEntity(); 
+                            $ext = substr(strtolower(strrchr($adjunto['name'], '.')), 1); //get the extension
+                            $multimedia->enlace = $adjunto['name'];
+                            $multimedia->formato = $ext;
+                            if ($tabla_multimedia->save($multimedia)){
+                                $enlace->tek_idtek = $tek->idtek;
+                                $enlace->tek_usuario_idusuario = $tek->usuario_idusuario;
+                                $enlace->tek_usuario_comunidad_idcomunidad = 1;
+                                $enlace->tek_categoria_tek_idcategoria_tek = $tek->categoria_tek_idcategoria_tek;
+                                $enlace->multimedia_idmultimedia = $multimedia->idmultimedia;
+                                $tabla_tekhasmultimedia->save($enlace);
+
+                                //copiar archivo temporal
+                                $file = $adjunto; //put the data into a var for easy use
+                                $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
+                                $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                                if(in_array($ext, $arr_ext))
+                                {
+                                    $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
+                                    mkdir($dir, 0755, true);
+                                    //array_map('unlink', glob($dir . "portada.*"));                        
+                                    if(!move_uploaded_file($file['tmp_name'], $dir . $file['name'])) 
+                                    {
+                                        $this->Flash->error(__('Image could not be saved. Please, try again: ' . $file['name']));
+                                    } else {                            
+                                        $this->Flash->success(__('Archivo subido: ' . $file['name']));                                        
+                                    }
+            
+                                } else {
+                                    $this->Flash->error(__('Extension no valida para archivo: ' . $file['name']));                                    
+                                }                                
+                            }
+                        }                        
+                    }
                     $this->Flash->success(__('TEK actualizado.'));
-                    return $this->redirect(['action' => 'view/' . $tek->idtek]);
+                    return $this->redirect(['action' => 'edit/' . $tek->idtek]);
                 } else {
                     $this->Flash->error(__('Error al actualizar TEK.'));
-                    return $this->redirect(['action' => 'view/' . $tek->idtek]);
+                    return $this->redirect(['action' => 'edit/' . $tek->idtek]);
                 }
             }
         }           
-        $this->set('tek', $tek);        
+        $this->set('tek', $tek);  
+        //recopilar y almacenar medios para mostrar
+        $medios = array();     
+        $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'tek/' . $idtek . '/';         
+        $tabla_multimedia = TableRegistry::get('Multimedia');
+        $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');   
+        $relacion_medios = $tabla_tekhasmultimedia->find('all')->where(['tek_idtek = ' => $tek->idtek]);
+        foreach ($relacion_medios as $rel){
+            $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
+            if (!empty($multimedia)){
+                //$temp = new \stdClass();
+                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
+                //array_push($medios, $temp);
+                $multimedia->ruta = $dir . $multimedia->enlace;
+                array_push($medios, $multimedia);
+            }
+        }
+        $this->set('medios', $medios);        
+        $this->set('editar', true);            
     } 
+
+    public function editmedios($idmultimedia = null){
+        if ($this->request->is(['post', 'put'])) {
+            if (!empty($this->request->getData())) {
+                $tabla_multimedia = TableRegistry::get('Multimedia');
+                $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');                
+                $multimedia = $tabla_multimedia->get($idmultimedia);
+                $relacion_medios = $tabla_tekhasmultimedia->find('all')->where(['multimedia_idmultimedia = ' => $idmultimedia]);
+                $idtek = '';
+                foreach ($relacion_medios as $rel){
+                    $idtek = $rel->tek_idtek;
+                }
+                $tabla_multimedia->patchEntity($multimedia, $this->request->getData());
+                if ($tabla_multimedia->save($multimedia)) {
+                    $this->Flash->success(__('Multimedia actualizado'));
+                } else {
+                    $this->Flash->success(__('Error al actualizar multimedia'));
+                }
+                return $this->redirect(['action' => 'edit/' . $idtek]);
+            }
+        }
+    }
     
     public function medios($idtek = null){
         if ($idtek != null){
@@ -211,12 +302,18 @@ class TekController extends AppController
             $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'tek/' . $idtek . '/';
             $temp = new \stdClass();
             $temp->image = array("src" => $dir . $tek->imagen, "poster" => $dir . $tek->imagen);
-            array_push($medios, $temp);                   
-            /*foreach ($comunidad as $row){
-                $temp = new \stdClass();
-                $temp->image = array("src" => $row->imagen, "poster" => $row->imagen);
-                array_push($medios, $temp);
-            }*/
+            array_push($medios, $temp);           
+            $tabla_multimedia = TableRegistry::get('Multimedia');
+            $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');   
+            $relacion_medios = $tabla_tekhasmultimedia->find('all')->where(['tek_idtek = ' => $tek->idtek]);
+            foreach ($relacion_medios as $rel){
+                $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
+                if (!empty($multimedia)){
+                    $temp = new \stdClass();
+                    $temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
+                    array_push($medios, $temp);
+                }
+            }
             $responseResult = json_encode($medios);
             $this->response->type('json');
             $this->response->body($responseResult);

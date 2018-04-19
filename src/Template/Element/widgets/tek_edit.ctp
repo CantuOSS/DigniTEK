@@ -24,6 +24,11 @@
         <div class="form-group">
             <?php echo $this->Form->input('image_path[]', ['type' => 'file', 'multiple' => 'false', 'label' => 'Imagen del TEK']);?>
         </div>          
+        <?php if (!empty($editar) && $editar == true) {?>
+            <div class="form-group">
+                <?php echo $this->Form->input('multimedia[]', ['type' => 'file', 'multiple' => 'true', 'label' => 'Multimedia']);?>
+            </div>           
+        <?php } ?>
         <?php echo $this->Form->button(__('Guardar'));?>
     <?php echo $this->Form->end();?>
   </div>

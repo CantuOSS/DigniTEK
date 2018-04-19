@@ -17,5 +17,6 @@
     <?= $this->element('datatables_scr') ?>
     <?= $this->element('galeria_tek_scr') ?>
     <?= $this->element('tek/ver/tek_ver_script') ?>
+    <?= $this->element('magnific_popup_scr') ?>
     <?= $this->element('menu_activo_scr') ?>
 </html>

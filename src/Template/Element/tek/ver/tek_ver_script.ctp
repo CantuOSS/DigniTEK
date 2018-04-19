@@ -1,8 +1,13 @@
 <script>
-        jQuery(function($){
-            $('.table').footable({
-                "columns": $.get('/columns.json'),
-		        "rows": $.get('/rows.json')                
-            });
-        });        
+$(document).ready(function(){
+    $('.img_gal').click(function(){
+        console.log("click en imagen: " + $(this).attr('src'));
+        $.magnificPopup.open({
+            items: {
+                src: $(this).attr('src')
+            },
+            type: 'image'
+        });         
+    });
+});
 </script>

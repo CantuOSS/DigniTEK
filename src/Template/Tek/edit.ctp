@@ -12,5 +12,6 @@
 </body>
     <?= $this->element('footer') ?>    
     <?= $this->element('footscr') ?>   
+    <?= $this->element('magnific_popup_scr') ?>    
     <?= $this->element('menu_activo_scr') ?>
 </html>
