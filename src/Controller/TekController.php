@@ -321,6 +321,37 @@ class TekController extends AppController
         }
     }    
 
+    public function elimmedios($idmedio = null){
+        if ($idmedio != null){
+            if ($this->request->is(['post', 'put'])) {
+                $tabla_multimedia = TableRegistry::get('Multimedia');
+                $tabla_tekhasmultimedia = TableRegistry::get('TekHasMultimedia');   
+                $relacion_medios = $tabla_tekhasmultimedia->find('all')->where(['multimedia_idmultimedia = ' => $idmedio]);
+                foreach ($relacion_medios as $instancia){
+                    $idtek = $instancia->tek_idtek;
+                    $result = $tabla_tekhasmultimedia->delete($instancia);
+                    if ($result){
+                        $multimedia = $tabla_multimedia->get($idmedio);
+                        $archivo = $multimedia->enlace;
+                        $resultmult = $tabla_multimedia->delete($multimedia);
+                        if ($resultmult){
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $idtek . '/' . DS; //<!-- app/webroot/img/
+                            array_map('unlink', glob($dir . $archivo)); 
+                            $this->Flash->success(__('Multimedia eliminado: ' . $archivo));
+                        } else {
+                            $this->Flash->error(__('Error al eliminar instancia multimedia'));
+                        }
+                    } else {
+                        $this->Flash->error(__('Error al eliminar referencia multimedia'));
+                    }
+                }         
+                return $this->redirect(['action' => 'edit/' . $idtek]);   
+            }
+        } else {
+            return $this->redirect(['action' => 'index']);   
+        }        
+    }
+
     public function isAuthorized($user) {
         //auth check
         //return boolean
