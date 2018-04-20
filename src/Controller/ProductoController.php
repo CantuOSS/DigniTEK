@@ -4,6 +4,7 @@
 namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
+use Cake\ORM\TableRegistry;
 
 class ProductoController extends AppController
 {
@@ -22,6 +23,7 @@ class ProductoController extends AppController
         $this->set('activo', 'navProductos');
         $producto = $this->Producto->get($idproducto);
         $this->set('producto', $producto);
+        $this->set('modulo', 'producto');   
     }    
 
     public function beforeFilter(Event $event)
@@ -151,6 +153,32 @@ class ProductoController extends AppController
 
         $this->set('producto', $producto);        
     } 
+
+    public function medios($idproducto = null){
+        if ($idproducto != null){
+            $producto = $this->Producto->get($idproducto);
+            $medios = array();     
+            $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'producto/' . $idproducto . '/';
+            $temp = new \stdClass();
+            $temp->image = array("src" => $dir . $producto->imagen, "poster" => $dir . $producto->imagen);
+            array_push($medios, $temp);           
+            $tabla_multimedia = TableRegistry::get('Multimedia');
+            $tabla_productohasmultimedia = TableRegistry::get('ProductoHasMultimedia');   
+            $relacion_medios = $tabla_productohasmultimedia->find('all')->where(['producto_idproducto = ' => $producto->idproducto]);
+            foreach ($relacion_medios as $rel){
+                $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
+                if (!empty($multimedia)){
+                    $temp = new \stdClass();
+                    $temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
+                    array_push($medios, $temp);
+                }
+            }
+            $responseResult = json_encode($medios);
+            $this->response->type('json');
+            $this->response->body($responseResult);
+            return $this->response;        
+        }
+    }    
 
     public function isAuthorized($user) {
         //auth check
