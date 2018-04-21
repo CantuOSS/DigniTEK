@@ -25,10 +25,7 @@
         </div>        
         <div class="form-group">
           <?php echo $this->Form->input('longitud');    ?>
-        </div>        
-        <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
-        </div>          
+        </div>                
         <?php echo $this->Form->end();?>
 
   </div>  

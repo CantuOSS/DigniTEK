@@ -51,13 +51,17 @@
                 "columns": [
                             {"type": "object","title":"Imagen", "name":"imagen", "formatter": function(value){
                                     if (value){
-                                        return '<img src="http://satyr.io/'+value.width+'x'+value.height+'/'+value.theme+'"/>';
+                                        return '<img class="img-fluid" style="height: 150px; width: 300px;" src="/DigniTEK/uploads/files/social/' + value.directorio + "/" + value.id + "/" + value.enlace +'"/>';
                                     }
                                     return "";
                             }},
                             {"name":"titulo","title":"Titulo"},
                             {"name":"tipo","title":"Tipo"},                            
-                            {"name":"fecha","title":"Fecha","breakpoints":"xs sm"},                            
+                            {"name":"fecha","title":"Fecha","breakpoints":"xs sm",
+                            "formatter": function(value){
+                                moment.locale('es'); 
+                                return moment(value).format('MMMM D YYYY - h:mm');}
+                            },                        
                             {"name":"comentarios","title":"Comentarios","breakpoints":"xs sm"},
                             {"type": "object","title":"Ver", "name":"detalle","breakpoints":"xs sm", "formatter": function(value){
                                     if (value){                                        

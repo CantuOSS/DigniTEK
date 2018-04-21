@@ -15,10 +15,7 @@
         <div class="form-group">
         <label for="descripcion">Descripcion</label>
           <?php echo $this->Form->textarea('descripcion');    ?>
-        </div>
-        <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
-        </div>          
+        </div>       
         <?php echo $this->Form->end();?>
 
   </div>  

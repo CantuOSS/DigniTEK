@@ -9,7 +9,7 @@
               'button' => '<button{{attrs}} class="btn btn-primary">{{text}}</button>'
           ];
         ?>
-        <?php echo $this->Form->create($evento);?>
+        <?php echo $this->Form->create($evento, ['type' => 'file', 'id' => 'formarch']);?>
         <?php $this->Form->setTemplates($myTemplates);    ?>
         <div class="form-group">
           <?php echo $this->Form->input('titulo');    ?>
@@ -30,8 +30,8 @@
           <?php echo $this->Form->input('longitud');    ?>
         </div>        
         <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
-        </div>          
+          <?php echo $this->Form->input('image_path[]', ['type' => 'file', 'multiple' => 'false', 'label' => 'Imagen del evento']);?>
+        </div>         
         <?php echo $this->Form->button(__('Guardar'));?>
         <?php echo $this->Form->end();?>
 

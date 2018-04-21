@@ -8,7 +8,7 @@
             'button' => '<button{{attrs}} class="btn btn-primary">{{text}}</button>'
         ];
       ?>
-        <?php echo $this->Form->create($publicacion);?>
+        <?php echo $this->Form->create($publicacion, ['type' => 'file', 'id' => 'formarch']);?>
         <?php $this->Form->setTemplates($myTemplates);    ?>
         <div class="form-group">
           <?php echo $this->Form->input('titulo');    ?>
@@ -16,9 +16,9 @@
         <div class="form-group">
         <label for="descripcion">Descripcion</label>
           <?php echo $this->Form->textarea('descripcion');    ?>
-        </div>
+        </div>         
         <div class="form-group">
-          <?php echo $this->Form->input('imagen');    ?>
+          <?php echo $this->Form->input('image_path[]', ['type' => 'file', 'multiple' => 'false', 'label' => 'Imagen de la publicacion']);?>
         </div>          
         <?php echo $this->Form->button(__('Guardar'));?>
         <?php echo $this->Form->end();?>

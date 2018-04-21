@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 
-class Comunidad extends Entity
+class Comentario extends Entity
 {
     protected $_accessible = [
         '*' => true,
