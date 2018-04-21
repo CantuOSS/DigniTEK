@@ -9,4 +9,9 @@
             <?= $this->element('widgets/galeria') ?> 
         </div>
     </div>    
+    <div class="row">
+        <div class="col-sm-12">            
+            <?= $this->element('widgets/comentarios_publicacion') ?> 
+        </div>
+    </div>       
 </div>

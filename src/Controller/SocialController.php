@@ -26,8 +26,19 @@ class SocialController extends AppController
         $this->set('id', $id);
         if ($tipo == "publicacion"){
             $tabla_publicacion = TableRegistry::get('Publicacion');
+            $tabla_usuario = TableRegistry::get('Usuario');
             $publicacion = $tabla_publicacion->get($id);
             $this->set('publicacion', $publicacion);
+
+            //obtener comentarios de la publiacion
+            $tabla_comentario = TableRegistry::get('Comentario');
+            $comentarios = $tabla_comentario->find('all')->where(['publicacion_idpublicacion = ' => $publicacion->idpublicacion]);
+            foreach($comentarios as $comentario){
+                $usuario = $tabla_usuario->get($comentario->usuario_idusuario);
+                $comentario->usuario = $usuario->nombre . " " . $usuario->apellidos;
+            }
+            $this->set('comentarios', $comentarios);
+
         } else if ($tipo == "evento"){
             $tabla_evento = TableRegistry::get('Evento');
             $evento = $tabla_evento->get($id);
@@ -371,7 +382,26 @@ class SocialController extends AppController
                 return $this->response;   
             }                 
         }
-    }     
+    }   
+    
+    public function agregacomentario(){
+        if ($this->request->is(['post', 'put'])) {
+            if (!empty($this->request->getData())){
+                //echo print_r($this->request->getData());
+                $tabla_comentario = TableRegistry::get('Comentario');
+                $comentario = $tabla_comentario->newEntity();
+                $comentario->publicacion_usuario_comunidad_idcomunidad = "1";
+                $tabla_comentario->patchEntity($comentario, $this->request->getData());
+                if ($tabla_comentario->save($comentario)) {
+                    $this->Flash->success(__('Comentario agregado.'));                                      
+                } else {
+                    $this->Flash->error(__('Error al agregar comentario.'));                    
+                }
+                return $this->redirect(['action' => 'view/publicacion/' . $comentario->publicacion_idpublicacion]);                  
+            }
+            }
+        return $this->redirect(['action' => 'index']);                  
+    }
 
     public function isAuthorized($user) {
         //auth check

@@ -8,5 +8,5 @@
         <div class="col-sm-12">            
             <?= $this->element('widgets/galeria') ?> 
         </div>
-    </div>    
+    </div>        
 </div>
