@@ -95,4 +95,18 @@ class AppController extends Controller
     {            
         $this->Auth->allow(['index', 'display']);
     }    
+
+    public function isAuthorized($user) {
+        // Admin can access every action
+        if (in_array($this->request->action, array('edit', 'delete', 'add'))) {
+            if (isset($user['rol']) && in_array($user['rol'], array('coordinador', 'contribuidor'))) {
+                return true;
+            }
+        
+            // Default deny
+            return false;
+        } else {
+            return true;
+        }
+    }    
 }

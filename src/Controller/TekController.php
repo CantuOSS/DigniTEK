@@ -353,9 +353,24 @@ class TekController extends AppController
     }
 
     public function isAuthorized($user) {
-        //auth check
-        //return boolean
-        return true;
+        // All registered users can add posts
+        if ($this->action === 'add') {
+            return true;
+        }
+        $this->log("ID post para editar TEK: " . $this->request->getParam('pass')[0] , 'debug');
+        $this->log("Tipo de accion: " . $this->request->action , 'debug');
+        $this->log("ID usuario: " . $user['idusuario'], 'debug');
+        // The owner of a post can edit and delete it
+        if (in_array($this->request->action, array('edit', 'delete'))) {            
+            $postId = (int) $this->request->getParam('pass')[0];
+            if ($this->Tek->find('propietario', ['usuario' => $user, 'post' => $this->request->getParam('pass')[0]])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return parent::isAuthorized($user);
     }     
 }
 ?>
