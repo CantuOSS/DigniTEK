@@ -3,7 +3,7 @@
         <h4>Perfil de usuario</h4>     
     <div class="panel-body">
     <div class="row">
-                <div class="col-xs-12 col-md-3 col-lg-3 " align="center"> <?php echo $this->Html->image('Placeholder.png', ['alt' => 'CakePHP', 'class' => 'img-responsive']);?> </div>
+                <div class="col-xs-12 col-md-3 col-lg-3 " align="center"> <?php echo $this->Html->image('usuario.png', ['alt' => 'CakePHP', 'class' => 'img-responsive']);?> </div>
                 
                 <div class="col-xs-12 col-md-9 col-lg-9 ">                 
                 
