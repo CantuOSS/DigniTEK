@@ -66,7 +66,10 @@ class TekController extends AppController
         $tek = $this->Tek->find('all', array('order' => 'modified DESC'));
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         foreach ($tek as $row){
-            $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idtek);
+            //$ruta = WWW_ROOT . "DigniTEK\\uploads\\files\\tek\\" . $row->idtek . "\\" . $row->imagen;
+            $ruta = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $row->idtek . '/' . $row->imagen;
+            //$this->log("ruta: " . $ruta, 'debug');
+            $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idtek, 'existe' => file_exists($ruta));
             $row->detalle = array('enlace' => 'tek/view/' . $row->idtek);
             $row->categoria = $tabla_categorias_tek->get($row->categoria_tek_idcategoria_tek)->nombre;
         }

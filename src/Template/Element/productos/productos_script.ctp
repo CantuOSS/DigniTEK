@@ -4,7 +4,11 @@
                 "columns": [
                             {"type": "object","title":"Imagen", "name":"imagen", "formatter": function(value){
                                     if (value){
-                                        return '<img class="img-fluid" style="height: 100px; width: 100px;" src="/DigniTEK/uploads/files/producto/' + value.id + "/" + value.enlace +'"/>';
+                                        if (value.existe){
+                                            return '<img class="img-fluid" style="height: 100px; width: 100px;" src="/DigniTEK/uploads/files/producto/' + value.id + "/" + value.enlace +'"/>';
+                                        } else {
+                                            return '<img class="img-fluid" style="height: 100px; width: 100px;" src="/DigniTEK/img/placeholder.png"/>';
+                                        }
                                     }
                                     return "";
                             }},

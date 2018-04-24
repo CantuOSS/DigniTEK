@@ -327,6 +327,7 @@ class SocialController extends AppController
         $eventos = $tabla_evento->find('all');
         $junto = array();
         foreach ($publicaciones as $row){
+            $ruta = WWW_ROOT . 'uploads/' . 'files/' . 'social/' . 'publicaciones/' . $row->idpublicacion . '/' . $row->imagen;
             $temp = new \stdClass();
             $temp->titulo = $row->titulo;
             $temp->tipo = 'Publicacion';            
@@ -337,18 +338,19 @@ class SocialController extends AppController
                 $cant_comentarios++;
             }
             $temp->comentarios = $cant_comentarios;
-            $temp->imagen = array('enlace' => $row->imagen, 'id' => $row->idpublicacion, 'directorio' => 'publicaciones');
+            $temp->imagen = array('enlace' => $row->imagen, 'id' => $row->idpublicacion, 'directorio' => 'publicaciones', 'existe' => file_exists($ruta));
             $temp->detalle = array('enlace' => 'social/view/publicacion/' . $row->idpublicacion);
             array_push($junto, $temp);
         }
         foreach ($eventos as $row){
+            $ruta = WWW_ROOT . 'uploads/' . 'files/' . 'social/' . 'eventos/' . $row->idevento . '/' . $row->imagen;
             $temp = new \stdClass();
             $temp->titulo = $row->titulo;
             $temp->tipo = 'Evento';
             $temp->directorio = 'eventos';
             $temp->fecha = $row->inicio;
             $temp->comentarios = 0;
-            $temp->imagen = array('enlace' => $row->imagen, 'id' => $row->idevento, 'directorio' => 'eventos');
+            $temp->imagen = array('enlace' => $row->imagen, 'id' => $row->idevento, 'directorio' => 'eventos', 'existe' => file_exists($ruta));
             $temp->detalle = array('enlace' => 'social/view/evento/' . $row->idevento);
             array_push($junto, $temp);
         }        

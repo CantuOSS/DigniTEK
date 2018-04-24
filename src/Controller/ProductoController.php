@@ -61,7 +61,8 @@ class ProductoController extends AppController
     public function listaproductos(){
         $producto = $this->Producto->find('all');
         foreach ($producto as $row){
-            $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idproducto);
+            $ruta = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $row->idproducto . '/' . $row->imagen;
+            $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idproducto, 'existe' => file_exists($ruta));
             $row->detalle = array('enlace' => 'producto/view/' . $row->idproducto);
         }
         $responseResult = json_encode($producto);

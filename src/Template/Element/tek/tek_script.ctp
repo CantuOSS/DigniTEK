@@ -50,7 +50,11 @@
                 "columns": [
                             {"type": "object","title":"Imagen", "name":"imagen", "formatter": function(value){
                                     if (value){
-                                        return '<img class="img-fluid" style="height: 150px; width: 300px;" src="/DigniTEK/uploads/files/tek/' + value.id + "/" + value.enlace +'"/>';
+                                        if (value.existe){
+                                            return '<img class="img-fluid" style="height: 150px; width: 300px;" src="/DigniTEK/uploads/files/tek/' + value.id + "/" + value.enlace +'"/>';
+                                        } else {
+                                            return '<img class="img-fluid" style="height: 150px; width: 300px;" src="/DigniTEK/img/placeholder.png"/>';
+                                        }
                                     }
                                     return "";
                             }},                                                
