@@ -102,7 +102,7 @@ class TekController extends AppController
         if ($this->request->is(['post', 'put'])) {      
             if (!empty($this->request->getData())) {      
                 $tek->usuario_comunidad_idcomunidad = "1";
-                $tek->usuario_idusuario = $this->Auth->user('idusuario');;
+                $tek->usuario_idusuario = $this->Auth->user('idusuario');
                 //$tek->categoria_tek_idcategoria_tek = $this->request->getData()['idcategoria_tek'];                 
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {

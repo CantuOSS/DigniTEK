@@ -85,7 +85,7 @@ class ProductoController extends AppController
                 }                
                 
                 $producto->usuario_comunidad_idcomunidad = "1";
-                $producto->usuario_idusuario = "1";            
+                $producto->usuario_idusuario = $this->Auth->user('idusuario');            
                 $this->Producto->patchEntity($producto, $this->request->getData());
                 if ($this->Producto->save($producto)) {
                     //guardar imagen de portada
@@ -317,9 +317,24 @@ class ProductoController extends AppController
     }    
 
     public function isAuthorized($user) {
-        //auth check
-        //return boolean
-        return true;
-    }     
+        // All registered users can add posts
+        if ($this->action === 'add') {
+            return true;
+        }
+        //$this->log("ID post para editar producto: " . $this->request->getParam('pass')[0] , 'debug');
+        //$this->log("Tipo de accion: " . $this->request->action , 'debug');
+        //$this->log("ID usuario: " . $user['idusuario'], 'debug');
+        // The owner of a post can edit and delete it
+        if (in_array($this->request->action, array('edit', 'delete'))) {            
+            $postId = (int) $this->request->getParam('pass')[0];
+            if ($this->Producto->find('propietario', ['usuario' => $user, 'post' => $this->request->getParam('pass')[0]])) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }    
 
 }
