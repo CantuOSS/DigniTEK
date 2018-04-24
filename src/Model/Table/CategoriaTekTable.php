@@ -12,3 +12,4 @@ class CategoriaTekTable extends Table
         $this->setDisplayField('nombre');
     }  
 }
+?>

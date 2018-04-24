@@ -12,3 +12,4 @@ class PublicacionTable extends Table
         $this->addBehavior('Timestamp');
     }  
 }
+?>

@@ -12,3 +12,4 @@ class EventoTable extends Table
         $this->addBehavior('Timestamp');
     }  
 }
+?>

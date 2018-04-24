@@ -39,3 +39,4 @@ class ArticlesTable extends Table
         return $validator;
     }    
 }
+?>

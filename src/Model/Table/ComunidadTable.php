@@ -27,3 +27,4 @@ class ComunidadTable extends Table
         return $validator;
     }    
 }
+?>

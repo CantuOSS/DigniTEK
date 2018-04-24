@@ -11,3 +11,4 @@ class Publicacion extends Entity
         'id' => true,
     ];
 }
+?>

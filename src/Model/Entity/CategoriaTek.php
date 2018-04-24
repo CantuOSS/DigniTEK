@@ -11,3 +11,4 @@ class CategoriaTek extends Entity
         'id' => true,
     ];
 }
+?>

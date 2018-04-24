@@ -11,3 +11,4 @@ class Producto extends Entity
         'id' => true,
     ];
 }
+?>

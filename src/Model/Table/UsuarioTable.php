@@ -42,3 +42,4 @@ class UsuarioTable extends Table
         return $validator;
     }    
 }
+?>

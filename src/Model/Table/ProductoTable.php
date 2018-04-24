@@ -12,3 +12,4 @@ class ProductoTable extends Table
         $this->addBehavior('Timestamp');
     }  
 }
+?>
