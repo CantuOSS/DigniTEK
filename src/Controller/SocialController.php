@@ -205,7 +205,7 @@ class SocialController extends AppController
 
                 $tabla_publicacion->patchEntity($publicacion, $this->request->getData());
                 $publicacion->usuario_comunidad_idcomunidad = "1";
-                $publicacion->usuario_idusuario = "1";                
+                $publicacion->usuario_idusuario = $this->Auth->user('idusuario');                
                 if ($tabla_publicacion->save($publicacion)) {
 
                     if(!empty($this->request->getData()['image_path'][0]['name']))
@@ -262,7 +262,7 @@ class SocialController extends AppController
 
                 $tabla_evento->patchEntity($evento, $this->request->getData());
                 $evento->usuario_comunidad_idcomunidad = "1";
-                $evento->usuario_idusuario = "1";                  
+                $evento->usuario_idusuario = $this->Auth->user('idusuario');                  
                 if ($tabla_evento->save($evento)) {
 
                     if(!empty($this->request->getData()['image_path'][0]['name']))
@@ -404,9 +404,37 @@ class SocialController extends AppController
     }
 
     public function isAuthorized($user) {
-        //auth check
-        //return boolean 
-        return true;
+        // All registered users can add posts
+        if ($this->request->action === 'add') {
+            return true;
+        }
+        //$this->log("ID post para editar: " . $this->request->getParam('pass')[1] , 'debug');
+        //$this->log("tipo para editar: " . $this->request->getParam('pass')[0] , 'debug');
+        //$this->log("Tipo de accion: " . $this->request->action , 'debug');
+        //$this->log("ID usuario: " . $user['idusuario'], 'debug');
+        // The owner of a post can edit and delete it
+        if (in_array($this->request->action, array('edit', 'delete'))) {            
+            $postId = (int) $this->request->getParam('pass')[1];
+            $tipo = $this->request->getParam('pass')[0];
+            if ($tipo == "publicacion"){
+                $tabla_publicacion = TableRegistry::get('Publicacion');
+                if ($tabla_publicacion->find('propietario', ['usuario' => $user, 'post' => $postId])) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else if ($tipo == "evento"){
+                $tabla_evento = TableRegistry::get('Evento');
+                $this->log("resultado de propietario de evento: " , 'debug');
+                if ($tabla_evento->find('propietario', ['usuario' => $user, 'post' => $postId])) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return parent::isAuthorized($user);
     }     
 
 }

@@ -354,7 +354,7 @@ class TekController extends AppController
 
     public function isAuthorized($user) {
         // All registered users can add posts
-        if ($this->action === 'add') {
+        if ($this->request->action === 'add') {
             return true;
         }
         $this->log("ID post para editar TEK: " . $this->request->getParam('pass')[0] , 'debug');
