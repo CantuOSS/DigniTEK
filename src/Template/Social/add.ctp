@@ -13,8 +13,7 @@
 </body>
     <?= $this->element('footer') ?>    
     <?= $this->element('footscr') ?>
-    <?= $this->element('datatables_scr') ?>
-    <?= $this->element('galeria_scr') ?>
+    <?= $this->element('datatables_scr') ?>    
     <?= $this->element('social/add/' . $tipo . '/social_add_' . $tipo . '_script') ?>         
     <?= $this->element('menu_activo_scr') ?>
 </html>

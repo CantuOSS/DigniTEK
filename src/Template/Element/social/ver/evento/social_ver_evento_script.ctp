@@ -1,25 +1,25 @@
-<script type="text/javascript">
-    $(".form_datetime").datetimepicker({
-        format: "dd MM yyyy - hh:ii",
-        autoclose: true,
-        todayBtn: true,
-        startDate: "2013-02-14 10:00",
-        minuteStep: 10
-    });
-    $('.form_datetime')
-        .datetimepicker()
-        .on('changeDate', function(ev){
-            //console.log(ev);
-            console.log("anio: " + ev.date.getFullYear());
-            console.log("mes: " + ev.date.getMonth());
-            console.log("dia: " + ev.date.getDate());
-            console.log("hora: " + ev.date.getHours());
-            console.log("minuto: " + ev.date.getMinutes());
-            document.getElementsByName("inicio[year]")[0].value = ev.date.getFullYear();            
-            document.getElementsByName("inicio[month]")[0].value = ("0" + (ev.date.getMonth()+1)).slice(-2);            
-            document.getElementsByName("inicio[day]")[0].value = ("0" + ev.date.getDate()).slice(-2);            
-            document.getElementsByName("inicio[hour]")[0].value = ("0" + ev.date.getHours()).slice(-2);            
-            document.getElementsByName("inicio[minute]")[0].value = ("0" + ev.date.getMinutes()).slice(-2);            
-            //document.getElementById("longitud").value = dato.lng();                   
-        });    
+<script>
+      function initMap() {
+        <?php if ($evento->latitud == null && $evento->longitud == null) { ?>
+          var uluru = {lat: 22.829208, lng: -106.6276705};
+          var zoom = 6;          
+        <?php } else { ?>
+          var uluru = {lat: <?php echo $evento->latitud ?>, lng: <?php echo $evento->longitud ?>};
+          var zoom = 15;
+        <?php }?>
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: zoom,
+          center: uluru
+        });
+        <?php if ($evento->latitud != null && $evento->longitud != null) { ?>
+          var marker = new google.maps.Marker({
+            position: uluru,
+            map: map
+          });
+        <?php }?>
+      }
+</script>
+
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA4ZNehyBtk5I-Cz85Qin66e_rM32ShqPM&callback=initMap">
 </script>

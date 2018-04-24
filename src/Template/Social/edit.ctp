@@ -14,7 +14,6 @@
     <?= $this->element('footer') ?>    
     <?= $this->element('footscr') ?>
     <?= $this->element('datatables_scr') ?>
-    <?= $this->element('galeria_scr') ?>
     <?= $this->element('datetimepicker_scr') ?>
     <?= $this->element('social/editar/' . $tipo . '/social_editar_' . $tipo . '_script') ?>         
     <?= $this->element('menu_activo_scr') ?>

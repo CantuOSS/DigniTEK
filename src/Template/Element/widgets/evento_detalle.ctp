@@ -21,11 +21,8 @@
             <?php echo $this->Form->input('inicio');    ?>
         </div>        
         <div class="form-group">
-          <?php echo $this->Form->input('latitud');    ?>
-        </div>        
-        <div class="form-group">
-          <?php echo $this->Form->input('longitud');    ?>
-        </div>                
+          <?= $this->element('widgets/ubicacion_evento') ?>        
+        </div>                   
         <?php echo $this->Form->end();?>
 
   </div>  

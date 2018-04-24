@@ -24,11 +24,10 @@
             <!--<input size="16" type="text" value="2012-06-15 14:45" name="fechasel" readonly class="form_datetime form-control">-->
         </div>        
         <div class="form-group">
-          <?php echo $this->Form->input('latitud');    ?>
-        </div>        
-        <div class="form-group">
-          <?php echo $this->Form->input('longitud');    ?>
-        </div>        
+          <?= $this->element('widgets/ubicacion_evento') ?>        
+          <?php echo $this->Form->input('latitud');?>
+          <?php echo $this->Form->input('longitud');?>
+        </div>       
         <div class="form-group">
           <?php echo $this->Form->input('image_path[]', ['type' => 'file', 'multiple' => 'false', 'label' => 'Imagen del evento']);?>
         </div>         
