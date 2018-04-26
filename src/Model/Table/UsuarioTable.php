@@ -1,5 +1,4 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -20,25 +19,26 @@ class UsuarioTable extends Table
             ->notEmpty('nombre')
 
             ->requirePresence('apellidos')
-            ->notEmpty('apellidos')       
-            
+            ->notEmpty('apellidos')    
+
             ->requirePresence('nacimiento')
-            ->notEmpty('nacimiento')        
-            
+            ->notEmpty('nacimiento')     
+
             ->requirePresence('sexo')
             ->notEmpty('sexo')     
-            
+
             ->requirePresence('correo')
-            ->notEmpty('correo')         
-            
+            ->notEmpty('correo')       
+
             ->requirePresence('username')
-            ->notEmpty('username')         
-            
+            ->notEmpty('username')    
+
             ->requirePresence('password')
-            ->notEmpty('password')         
-            
+            ->notEmpty('password')    
+
             ->requirePresence('rol')
-            ->notEmpty('rol');                     
+            ->notEmpty('rol');   
+                              
         return $validator;
     }    
 }

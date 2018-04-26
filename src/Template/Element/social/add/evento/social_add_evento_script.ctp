@@ -1,131 +1,66 @@
 <script>
-      var map;
-      var marker;
-      function initMap() {
-        <?php if ($evento->latitud == null && $evento->longitud == null) { ?>
-          var uluru = {lat: 22.829208, lng: -106.6276705};
-          var zoom = 6;
-        <?php } else { ?>
-          var uluru = {lat: <?php echo $evento->latitud ?>, lng: <?php echo $evento->longitud ?>};
-          var zoom = 15;
-        <?php }?>
-        map = new google.maps.Map(document.getElementById('map'), {
-          zoom: zoom,
-          center: uluru
-        });
-        marker = new google.maps.Marker({
-            map: map,
-            draggable: false
-        });   
-        marker.setMap(map);     
-        <?php if ($evento->latitud != null && $evento->longitud != null) { ?>
-          marker = new google.maps.Marker({
-            position: uluru,
-            map: map,
-            draggable: false
-          });
-        <?php }?>
-        map.addListener('click', function(e) {
-          deleteMarkers();
-          placeMarkerAndPanTo(e.latLng, map);
-        });
-        google.maps.event.addListener(marker,'dragend',function(event) {
-          //document.getElementById('lat').value = this.position.lat();
-          //document.getElementById('lng').value = this.position.lng();
-          //actualizarUbicacion(this.position);
-          deleteMarkers();
-          placeMarkerAndPanTo(event.latLng, map);
-        });        
-        function placeMarkerAndPanTo(latLng, map) {
-          markertmp = new google.maps.Marker({
-            position: latLng,
-            map: map,
-            draggable: false
-          });
-          //google.maps.event.addListener(markertmp, 'click', function(event){
-          //  console.log(event.latLng.lat() + ', ' + event.latLng.lng());         
-          //});            
-          actualizarUbicacion(latLng);
-          map.panTo(latLng);
-          marker = markertmp;
-        }   
-        function deleteMarkers() {
-          clearMarkers();
-          marker = null;
-        }  
-        function clearMarkers() {
-          setMapOnAll(null);
-        }        
-        // Sets the map on all markers in the array.
-        function setMapOnAll(map) {
-            marker.setMap(map);
-        }         
-        function actualizarUbicacion(dato){
-          if (dato != null){
-            console.log(dato.lat() + ', ' + dato.lng()); 
-            document.getElementById("latitud").value = dato.lat();            
-            document.getElementById("longitud").value = dato.lng();            
-          }
-          
-        }
-
-      }
-      /*
-      $('#formarch').off().on('submit', function(e){
-        e.preventDefault();
-        var formdatas = new FormData($('#formarch')[0]);
-        $.ajax({
-            url: '/DigniTEK/comunidad/edit',
-            dataType: 'json',
-            method: 'post',
-            data:  formdatas,
-            xhr: function() {
-                var myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){
-                    myXhr.upload.addEventListener('progress',progress, false);
-                }
-                return myXhr;
-            },            
-            contentType: false,
-            processData: false
-        })
-            .done(function(response) {
-                console.log(response);
-                //show result
-                if (response.status == 'OK') {                  
-                } else if (response.status == 'FAIL') {
-
-                } else {
-                    //show default message
-                }
-            })
-            .fail(function(jqXHR) {
-                if (jqXHR.status == 403) {
-                    window.location = '/';
-                } else {
-                    console.log(jqXHR);
-
-                }
-            });
-
-      });    
-
-      function progress(e){
-
-        if(e.lengthComputable){
-            var max = e.total;
-            var current = e.loaded;
-
-            var Percentage = (current * 100)/max;
-            console.log(Percentage);
-
-
-            if(Percentage >= 100)
-            {
-              // process completed  
-            }
-        }  
-    }      */  
+  var map;
+  var marker;
+  function initMap() {
+    <?php if ($evento->latitud == null && $evento->longitud == null) { ?>
+      var uluru = {lat: 22.829208, lng: -106.6276705};
+      var zoom = 6;
+    <?php } else { ?>
+      var uluru = {lat: <?php echo $evento->latitud ?>, lng: <?php echo $evento->longitud ?>};
+      var zoom = 15;
+    <?php }?>
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: zoom,
+      center: uluru
+    });
+    marker = new google.maps.Marker({
+        map: map,
+        draggable: false
+    });   
+    marker.setMap(map);     
+    <?php if ($evento->latitud != null && $evento->longitud != null) { ?>
+      marker = new google.maps.Marker({
+        position: uluru,
+        map: map,
+        draggable: false
+      });
+    <?php }?>
+    map.addListener('click', function(e) {
+      deleteMarkers();
+      placeMarkerAndPanTo(e.latLng, map);
+    });
+    google.maps.event.addListener(marker,'dragend',function(event) {
+      deleteMarkers();
+      placeMarkerAndPanTo(event.latLng, map);
+    });        
+    function placeMarkerAndPanTo(latLng, map) {
+      markertmp = new google.maps.Marker({
+        position: latLng,
+        map: map,
+        draggable: false
+      });          
+      actualizarUbicacion(latLng);
+      map.panTo(latLng);
+      marker = markertmp;
+    }   
+    function deleteMarkers() {
+      clearMarkers();
+      marker = null;
+    }  
+    function clearMarkers() {
+      setMapOnAll(null);
+    }        
+    function setMapOnAll(map) {
+      marker.setMap(map);
+    }         
+    function actualizarUbicacion(dato){
+      if (dato != null){
+        console.log(dato.lat() + ', ' + dato.lng()); 
+        document.getElementById("latitud").value = dato.lat();            
+        document.getElementById("longitud").value = dato.lng();            
+      }  
+    }
+  }
 </script>
 
 <script async defer

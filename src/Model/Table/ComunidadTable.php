@@ -1,5 +1,4 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
@@ -21,9 +20,10 @@ class ComunidadTable extends Table
 
             ->requirePresence('descripcion')
             ->notEmpty('descripcion')       
-            
+
             ->requirePresence('lengua')
             ->notEmpty('lengua');
+            
         return $validator;
     }    
 }

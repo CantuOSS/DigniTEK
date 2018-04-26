@@ -1,5 +1,4 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -21,8 +20,8 @@ class PublicacionTable extends Table
             ->notEmpty('titulo')
 
             ->requirePresence('descripcion')
-            ->notEmpty('descripcion');           
-            
+            ->notEmpty('descripcion');      
+                 
         return $validator;
     }      
 
@@ -30,7 +29,6 @@ class PublicacionTable extends Table
     {
         $user = $options['usuario'];
         $post = $options['post'];
-        //$this->log("usuario valido para edicion: " . $user['idusuario'] . ", resultado: " . $query->where(['usuario_idusuario' => $user['idusuario']]), 'debug');
         $res = $this->find('all')->where(['idpublicacion' => $post, 'usuario_idusuario' => $user['idusuario']]);
         $valido = false;
         $cont = 0;

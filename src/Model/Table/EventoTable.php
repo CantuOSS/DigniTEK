@@ -1,5 +1,4 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -21,11 +20,11 @@ class EventoTable extends Table
             ->notEmpty('titulo')
 
             ->requirePresence('descripcion')
-            ->notEmpty('descripcion')              
-            
+            ->notEmpty('descripcion')         
+
             ->requirePresence('inicio')
-            ->notEmpty('inicio');             
-            
+            ->notEmpty('inicio');      
+                    
         return $validator;
     }      
     
@@ -33,7 +32,6 @@ class EventoTable extends Table
     {
         $user = $options['usuario'];
         $post = $options['post'];
-        //$this->log("usuario valido para edicion: " . $user['idusuario'] . ", resultado: " . $query->where(['usuario_idusuario' => $user['idusuario']]), 'debug');
         $res = $this->find('all')->where(['idevento' => $post, 'usuario_idusuario' => $user['idusuario']]);
         $valido = false;
         $cont = 0;

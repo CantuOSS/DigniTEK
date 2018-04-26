@@ -1,6 +1,4 @@
 <?php
-// src/Controller/ArticlesController.php
-
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -11,7 +9,6 @@ class TekController extends AppController
 {
     public function initialize(){
         parent::initialize();
-        //$this->set('titulo', 'Nombre de la comunidad');
     }
 
     public function index()
@@ -21,14 +18,12 @@ class TekController extends AppController
 
     public function view($idtek = null)
     {
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navTek');
         $tek = $this->Tek->get($idtek);
         $this->set('tek', $tek);
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         $categoria = $tabla_categorias_tek->get($tek->categoria_tek_idcategoria_tek)->nombre;
         $this->set('categoria', $categoria);
-
         //recopilar y almacenar medios para mostrar
         $medios = array();     
         $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'tek/' . $idtek . '/';
@@ -42,9 +37,6 @@ class TekController extends AppController
         foreach ($relacion_medios as $rel){
             $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
             if (!empty($multimedia)){
-                //$temp = new \stdClass();
-                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
-                //array_push($medios, $temp);
                 $multimedia->ruta = $dir . $multimedia->enlace;
                 array_push($medios, $multimedia);
             }
@@ -56,9 +48,6 @@ class TekController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        // Allow users to register and logout.
-        // You should not add the "login" action to allow list. Doing so would
-        // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['listatek', 'medios', 'listacategorias']);
     }      
 
@@ -66,9 +55,7 @@ class TekController extends AppController
         $tek = $this->Tek->find('all', array('order' => 'modified DESC'));
         $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
         foreach ($tek as $row){
-            //$ruta = WWW_ROOT . "DigniTEK\\uploads\\files\\tek\\" . $row->idtek . "\\" . $row->imagen;
             $ruta = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $row->idtek . '/' . $row->imagen;
-            //$this->log("ruta: " . $ruta, 'debug');
             $row->imagen = array('enlace' => $row->imagen, 'id' => $row->idtek, 'existe' => file_exists($ruta));
             $row->detalle = array('enlace' => 'tek/view/' . $row->idtek);
             $row->categoria = $tabla_categorias_tek->get($row->categoria_tek_idcategoria_tek)->nombre;
@@ -94,66 +81,43 @@ class TekController extends AppController
 
     public function add()
     {
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navTek');
         $tek = $this->Tek->newEntity(); 
-        $tabla_categorias_tek = TableRegistry::get('CategoriaTek');
-        //$categorias = $tabla_categorias_tek->find('all');  
+        $tabla_categorias_tek = TableRegistry::get('CategoriaTek'); 
         $categorias = $tabla_categorias_tek->find('list');      
-        //$tek->categorias = $categorias;
         $this->set('categorias', $categorias);
         if ($this->request->is(['post', 'put'])) {      
             if (!empty($this->request->getData())) {      
                 $tek->usuario_comunidad_idcomunidad = "1";
-                $tek->usuario_idusuario = $this->Auth->user('idusuario');
-                //$tek->categoria_tek_idcategoria_tek = $this->request->getData()['idcategoria_tek'];                 
+                $tek->usuario_idusuario = $this->Auth->user('idusuario');            
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {
-                    $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
-                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
+                    $file = $this->request->getData()['image_path'][0];               
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1);                 
                     $tek->imagen = "portada." . $ext;
                 }
-
                 $this->Tek->patchEntity($tek, $this->request->getData());
                 if ($this->Tek->save($tek)) {
-
-
                     if(!empty($this->request->getData()['image_path'][0]['name']))
                     {
-                        $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
-    
-                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
-    
-                        //only process if the extension is valid
+                        $file = $this->request->getData()['image_path'][0];
+                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                         if(in_array($ext, $arr_ext))
                         {
-                            //name image to saved in database
-                            //$employee['product_image'] = $file['name'];
-    
-                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS;
                             mkdir($dir, 0755, true);
                             array_map('unlink', glob($dir . "portada.*"));                        
-    
-                            //do the actual uploading of the file. First arg is the tmp name, second arg is
-                            //where we are putting it
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
                             {
                                 $this -> Flash -> error(__('Image could not be saved. Please, try again.'));
-    
-                                //return $this->redirect(['action' => 'edit']);
                             } else {                            
-                                //$this->Comunidad->save($comunidad);
                                 $this->Flash->error(__('Archivo subido'));
-                                //return $this->redirect(['action' => 'edit']);
                             }
-    
                         } else {
-                            $this->Flash->error(__('Extension no valida'));
-                            //return $this->redirect(['action' => 'edit']);                    
+                            $this->Flash->error(__('Extension no valida'));                 
                         }
                     } 
-
                     $this->Flash->success(__('Tek creado.'));
                     return $this->redirect(['action' => 'index']);
                 } else {
@@ -175,23 +139,22 @@ class TekController extends AppController
         $this->set('categorias', $categorias);       
         if ($this->request->is(['post', 'put'])) {
             if (!empty($this->request->getData())) {
-
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {
-                    $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
-                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
+                    $file = $this->request->getData()['image_path'][0];               
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1);                   
                     $tek->imagen = "portada." . $ext;
                 }                
                 $this->Tek->patchEntity($tek, $this->request->getData());
                 if ($this->Tek->save($tek)) {
                     if(!empty($this->request->getData()['image_path'][0]['name']))
                     {
-                        $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
-                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                        $file = $this->request->getData()['image_path'][0];
+                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                         if(in_array($ext, $arr_ext))
                         {
-                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS;
                             mkdir($dir, 0755, true);
                             array_map('unlink', glob($dir . "portada.*"));                        
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
@@ -201,7 +164,6 @@ class TekController extends AppController
                                 $this->Flash->error(__('Archivo subido'));
                                 return $this->redirect(['action' => 'view/' . $tek->idtek]);
                             }
-    
                         } else {
                             $this->Flash->error(__('Extension no valida'));
                             return $this->redirect(['action' => 'view/' . $tek->idtek]);                  
@@ -214,7 +176,7 @@ class TekController extends AppController
                         foreach ($this->request->getData()['multimedia'] as $adjunto){
                             $multimedia = $tabla_multimedia->newEntity(); 
                             $enlace = $tabla_tekhasmultimedia->newEntity(); 
-                            $ext = substr(strtolower(strrchr($adjunto['name'], '.')), 1); //get the extension
+                            $ext = substr(strtolower(strrchr($adjunto['name'], '.')), 1);
                             $multimedia->enlace = $adjunto['name'];
                             $multimedia->formato = $ext;
                             if ($tabla_multimedia->save($multimedia)){
@@ -224,23 +186,20 @@ class TekController extends AppController
                                 $enlace->tek_categoria_tek_idcategoria_tek = $tek->categoria_tek_idcategoria_tek;
                                 $enlace->multimedia_idmultimedia = $multimedia->idmultimedia;
                                 $tabla_tekhasmultimedia->save($enlace);
-
                                 //copiar archivo temporal
-                                $file = $adjunto; //put the data into a var for easy use
-                                $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                                $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                                $file = $adjunto;
+                                $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                                $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                                 if(in_array($ext, $arr_ext))
                                 {
-                                    $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS; //<!-- app/webroot/img/
-                                    mkdir($dir, 0755, true);
-                                    //array_map('unlink', glob($dir . "portada.*"));                        
+                                    $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $tek->idtek . '/' . DS;
+                                    mkdir($dir, 0755, true);                       
                                     if(!move_uploaded_file($file['tmp_name'], $dir . $file['name'])) 
                                     {
                                         $this->Flash->error(__('Image could not be saved. Please, try again: ' . $file['name']));
                                     } else {                            
                                         $this->Flash->success(__('Archivo subido: ' . $file['name']));                                        
                                     }
-            
                                 } else {
                                     $this->Flash->error(__('Extension no valida para archivo: ' . $file['name']));                                    
                                 }                                
@@ -265,9 +224,6 @@ class TekController extends AppController
         foreach ($relacion_medios as $rel){
             $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
             if (!empty($multimedia)){
-                //$temp = new \stdClass();
-                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
-                //array_push($medios, $temp);
                 $multimedia->ruta = $dir . $multimedia->enlace;
                 array_push($medios, $multimedia);
             }
@@ -338,7 +294,7 @@ class TekController extends AppController
                         $archivo = $multimedia->enlace;
                         $resultmult = $tabla_multimedia->delete($multimedia);
                         if ($resultmult){
-                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $idtek . '/' . DS; //<!-- app/webroot/img/
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'tek/' . $idtek . '/' . DS;
                             array_map('unlink', glob($dir . $archivo)); 
                             $this->Flash->success(__('Multimedia eliminado: ' . $archivo));
                         } else {
@@ -356,14 +312,12 @@ class TekController extends AppController
     }
 
     public function isAuthorized($user) {
-        // All registered users can add posts
         if ($this->request->action === 'add') {
             return true;
         }
         $this->log("ID post para editar TEK: " . $this->request->getParam('pass')[0] , 'debug');
         $this->log("Tipo de accion: " . $this->request->action , 'debug');
         $this->log("ID usuario: " . $user['idusuario'], 'debug');
-        // The owner of a post can edit and delete it
         if (in_array($this->request->action, array('edit', 'delete'))) {            
             $postId = (int) $this->request->getParam('pass')[0];
             if ($this->Tek->find('propietario', ['usuario' => $user, 'post' => $this->request->getParam('pass')[0]])) {
@@ -372,7 +326,6 @@ class TekController extends AppController
                 return false;
             }
         }
-
         return parent::isAuthorized($user);
     }     
 }

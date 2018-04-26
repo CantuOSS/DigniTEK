@@ -8,22 +8,21 @@
             'select' => '<select readonly class="form-control" name="{{name}}"{{attrs}}>{{content}}</select>'
         ];
       ?>
-        <?php $this->Form->create($evento);?>
-        <?php $this->Form->setTemplates($myTemplates);    ?>
-        <div class="form-group">
-          <?php echo $this->Form->input('titulo');    ?>
-        </div>
-        <div class="form-group">
-        <label for="descripcion">Descripcion</label>
-          <?php echo $this->Form->textarea('descripcion');    ?>
-        </div>
-        <div class="form-group">
-            <?php echo $this->Form->input('inicio');    ?>
-        </div>        
-        <div class="form-group">
-          <?= $this->element('widgets/ubicacion_evento') ?>        
-        </div>                   
-        <?php echo $this->Form->end();?>
-
+      <?php $this->Form->create($evento);?>
+      <?php $this->Form->setTemplates($myTemplates);    ?>
+      <div class="form-group">
+        <?php echo $this->Form->input('titulo');    ?>
+      </div>
+      <div class="form-group">
+      <label for="descripcion">Descripcion</label>
+        <?php echo $this->Form->textarea('descripcion');    ?>
+      </div>
+      <div class="form-group">
+        <?php echo $this->Form->input('inicio');    ?>
+      </div>        
+      <div class="form-group">
+        <?= $this->element('widgets/ubicacion_evento') ?>        
+      </div>                   
+      <?php echo $this->Form->end();?>
   </div>  
 </div>

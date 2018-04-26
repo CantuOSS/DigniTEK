@@ -1,6 +1,4 @@
 <?php
-// src/Controller/ArticlesController.php
-
 namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Event\Event;
@@ -19,12 +17,10 @@ class ProductoController extends AppController
 
     public function view($idproducto = null)
     {
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navProductos');
         $producto = $this->Producto->get($idproducto);
         $this->set('producto', $producto);
         $this->set('modulo', 'producto');   
-
         //recopilar y almacenar medios para mostrar
         $medios = array();     
         $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'producto/' . $idproducto . '/';
@@ -38,9 +34,6 @@ class ProductoController extends AppController
         foreach ($relacion_medios as $rel){
             $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
             if (!empty($multimedia)){
-                //$temp = new \stdClass();
-                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
-                //array_push($medios, $temp);
                 $multimedia->ruta = $dir . $multimedia->enlace;
                 array_push($medios, $multimedia);
             }
@@ -52,9 +45,6 @@ class ProductoController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        // Allow users to register and logout.
-        // You should not add the "login" action to allow list. Doing so would
-        // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['listaproductos']);
     }          
 
@@ -73,15 +63,14 @@ class ProductoController extends AppController
 
     public function add()
     {
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navProductos');
         $producto = $this->Producto->newEntity(); 
         if ($this->request->is(['post', 'put'])) {  
             if (!empty($this->request->getData())) {        
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {
-                    $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
-                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
+                    $file = $this->request->getData()['image_path'][0];              
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1);                   
                     $producto->imagen = "portada." . $ext;
                 }                
                 
@@ -92,12 +81,12 @@ class ProductoController extends AppController
                     //guardar imagen de portada
                     if(!empty($this->request->getData()['image_path'][0]['name']))
                     {
-                        $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
-                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                        $file = $this->request->getData()['image_path'][0];
+                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                         if(in_array($ext, $arr_ext))
                         {
-                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS; //<!-- app/webroot/img/
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS;
                             mkdir($dir, 0755, true);
                             array_map('unlink', glob($dir . "portada.*"));                        
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
@@ -105,12 +94,10 @@ class ProductoController extends AppController
                                 $this->Flash->error(__('Image could not be saved. Please, try again.'));
                             } else {                            
                                 $this->Flash->error(__('Archivo subido'));
-                                //return $this->redirect(['action' => 'view/' . $producto->idproducto]);
                             }
     
                         } else {
-                            $this->Flash->error(__('Extension no valida'));
-                            //return $this->redirect(['action' => 'view/' . $producto->idproducto]);                  
+                            $this->Flash->error(__('Extension no valida'));                 
                         }
                     }
 
@@ -135,8 +122,8 @@ class ProductoController extends AppController
             if (!empty($this->request->getData())) {
                 if(!empty($this->request->getData()['image_path'][0]['name']))
                 {
-                    $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use                
-                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension                    
+                    $file = $this->request->getData()['image_path'][0];             
+                    $ext = substr(strtolower(strrchr($file['name'], '.')), 1);                   
                     $producto->imagen = "portada." . $ext;
                 }
 
@@ -145,12 +132,12 @@ class ProductoController extends AppController
                     //guardar imagen de portada
                     if(!empty($this->request->getData()['image_path'][0]['name']))
                     {
-                        $file = $this->request->getData()['image_path'][0]; //put the data into a var for easy use
-                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                        $file = $this->request->getData()['image_path'][0];
+                        $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                        $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                         if(in_array($ext, $arr_ext))
                         {
-                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS; //<!-- app/webroot/img/
+                            $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS;
                             mkdir($dir, 0755, true);
                             array_map('unlink', glob($dir . "portada.*"));                        
                             if(!move_uploaded_file($file['tmp_name'], $dir . "portada." . $ext)) 
@@ -158,12 +145,10 @@ class ProductoController extends AppController
                                 $this->Flash->error(__('Image could not be saved. Please, try again.'));
                             } else {                            
                                 $this->Flash->error(__('Archivo subido'));
-                                //return $this->redirect(['action' => 'view/' . $producto->idproducto]);
                             }
     
                         } else {
-                            $this->Flash->error(__('Extension no valida'));
-                            //return $this->redirect(['action' => 'view/' . $producto->idproducto]);                  
+                            $this->Flash->error(__('Extension no valida'));               
                         }
                     }
 
@@ -174,7 +159,7 @@ class ProductoController extends AppController
                         foreach ($this->request->getData()['multimedia'] as $adjunto){
                             $multimedia = $tabla_multimedia->newEntity(); 
                             $enlace = $tabla_productohasmultimedia->newEntity(); 
-                            $ext = substr(strtolower(strrchr($adjunto['name'], '.')), 1); //get the extension
+                            $ext = substr(strtolower(strrchr($adjunto['name'], '.')), 1);
                             $multimedia->enlace = $adjunto['name'];
                             $multimedia->formato = $ext;
                             if ($tabla_multimedia->save($multimedia)){
@@ -183,30 +168,26 @@ class ProductoController extends AppController
                                 $enlace->producto_usuario_comunidad_idcomunidad = 1;                                
                                 $enlace->multimedia_idmultimedia = $multimedia->idmultimedia;
                                 $tabla_productohasmultimedia->save($enlace);
-
                                 //copiar archivo temporal
-                                $file = $adjunto; //put the data into a var for easy use
-                                $ext = substr(strtolower(strrchr($file['name'], '.')), 1); //get the extension
-                                $arr_ext = array('jpg', 'jpeg', 'gif', 'png'); //set allowed extensions
+                                $file = $adjunto;
+                                $ext = substr(strtolower(strrchr($file['name'], '.')), 1);
+                                $arr_ext = array('jpg', 'jpeg', 'gif', 'png');
                                 if(in_array($ext, $arr_ext))
                                 {
-                                    $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS; //<!-- app/webroot/img/
-                                    mkdir($dir, 0755, true);
-                                    //array_map('unlink', glob($dir . "portada.*"));                        
+                                    $dir = WWW_ROOT . 'uploads/' . 'files/' . 'producto/' . $producto->idproducto . '/' . DS;
+                                    mkdir($dir, 0755, true);                    
                                     if(!move_uploaded_file($file['tmp_name'], $dir . $file['name'])) 
                                     {
                                         $this->Flash->error(__('Image could not be saved. Please, try again: ' . $file['name']));
                                     } else {                            
                                         $this->Flash->success(__('Archivo subido: ' . $file['name']));                                        
                                     }
-            
                                 } else {
                                     $this->Flash->error(__('Extension no valida para archivo: ' . $file['name']));                                    
                                 }                                
                             }
                         }                        
                     }                    
-
                     $this->Flash->success(__('Producto actualizado.'));
                     return $this->redirect(['action' => 'view/' . $producto->idproducto]);
                 }
@@ -216,7 +197,6 @@ class ProductoController extends AppController
         }               
 
         $this->set('producto', $producto); 
-
         //recopilar y almacenar medios para mostrar
         $medios = array();     
         $dir = '/DigniTEK/' . 'uploads/' . 'files/' . 'producto/' . $idproducto . '/';         
@@ -226,15 +206,11 @@ class ProductoController extends AppController
         foreach ($relacion_medios as $rel){
             $multimedia = $tabla_multimedia->get($rel->multimedia_idmultimedia);
             if (!empty($multimedia)){
-                //$temp = new \stdClass();
-                //$temp->image = array("src" => $dir . $multimedia->enlace, "poster" => $dir . $multimedia->enlace, "idmedio" => $multimedia->idmultimedia, "descripcion" => $multimedia->descripcion);
-                //array_push($medios, $temp);
                 $multimedia->ruta = $dir . $multimedia->enlace;
                 array_push($medios, $multimedia);
             }
         }
         $this->set('medios', $medios);           
-
         $this->set('editar', true);                   
     } 
 
@@ -318,14 +294,9 @@ class ProductoController extends AppController
     }    
 
     public function isAuthorized($user) {
-        // All registered users can add posts
         if ($this->request->action === 'add') {
             return true;
         }
-        //$this->log("ID post para editar producto: " . $this->request->getParam('pass')[0] , 'debug');
-        //$this->log("Tipo de accion: " . $this->request->action , 'debug');
-        //$this->log("ID usuario: " . $user['idusuario'], 'debug');
-        // The owner of a post can edit and delete it
         if (in_array($this->request->action, array('edit', 'delete'))) {            
             $postId = (int) $this->request->getParam('pass')[0];
             if ($this->Producto->find('propietario', ['usuario' => $user, 'post' => $this->request->getParam('pass')[0]])) {
@@ -334,8 +305,6 @@ class ProductoController extends AppController
                 return false;
             }
         }
-
         return parent::isAuthorized($user);
     }    
-
 }

@@ -1,6 +1,4 @@
 <?php
-// src/Controller/ArticlesController.php
-
 namespace App\Controller;
 
 use App\Controller\AppController;
@@ -12,19 +10,17 @@ class UsuarioController extends AppController
     {
         parent::initialize();
         $this->loadComponent('Paginator');
-        $this->loadComponent('Flash'); // Include the FlashComponent           
+        $this->loadComponent('Flash');          
     }    
 
     public function index()
     {
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navPerfil');  
         return $this->redirect('/usuario/view');   
     }
 
     public function view()
     {        
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navPerfil');
         $usuarioauth = $this->Auth->user('idusuario');
         $this->log('id usuario autentificado: ' . $usuarioauth,'debug');
@@ -39,7 +35,6 @@ class UsuarioController extends AppController
 
     public function add()
     {         
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navLog');          
         if ($this->request->is(['post', 'put'])) {
             $usuario = $this->Usuario->newEntity(); 
@@ -58,7 +53,6 @@ class UsuarioController extends AppController
 
     public function edit($idusuario = null)
     {        
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navPerfil');
         $usuario = $this->Usuario->get($idusuario);
 
@@ -77,15 +71,11 @@ class UsuarioController extends AppController
     public function beforeFilter(Event $event)
     {
         parent::beforeFilter($event);
-        // Allow users to register and logout.
-        // You should not add the "login" action to allow list. Doing so would
-        // cause problems with normal functioning of AuthComponent.
         $this->Auth->allow(['add', 'logout']);
     }        
 
     public function login()
     {      
-        //$this->set('titulo', 'Nombre de la comunidad');
         $this->set('activo', 'navLog');
         if ($this->request->is('post')) {
             $this->log('Inside login is post','debug');
@@ -103,8 +93,6 @@ class UsuarioController extends AppController
     }
 
     public function isAuthorized($user) {
-        //auth check
-        //return boolean
         return true;
     }    
 
@@ -121,5 +109,4 @@ class UsuarioController extends AppController
             return $this->redirect(['action' => 'login']);
         }
     }  
-
 }

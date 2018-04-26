@@ -30,8 +30,6 @@
           placeMarkerAndPanTo(e.latLng, map);
         });
         google.maps.event.addListener(marker,'dragend',function(event) {
-          //document.getElementById('lat').value = this.position.lat();
-          //document.getElementById('lng').value = this.position.lng();
           actualizarUbicacion(this.position);
         });        
         function placeMarkerAndPanTo(latLng, map) {
@@ -39,10 +37,7 @@
             position: latLng,
             map: map,
             draggable: true
-          });
-          //google.maps.event.addListener(markertmp, 'click', function(event){
-          //  console.log(event.latLng.lat() + ', ' + event.latLng.lng());         
-          //});            
+          });         
           actualizarUbicacion(latLng);
           map.panTo(latLng);
           marker = markertmp;
@@ -54,7 +49,6 @@
         function clearMarkers() {
           setMapOnAll(null);
         }        
-        // Sets the map on all markers in the array.
         function setMapOnAll(map) {
             marker.setMap(map);
         }         
@@ -67,63 +61,7 @@
           
         }
 
-      }
-      /*
-      $('#formarch').off().on('submit', function(e){
-        e.preventDefault();
-        var formdatas = new FormData($('#formarch')[0]);
-        $.ajax({
-            url: '/DigniTEK/comunidad/edit',
-            dataType: 'json',
-            method: 'post',
-            data:  formdatas,
-            xhr: function() {
-                var myXhr = $.ajaxSettings.xhr();
-                if(myXhr.upload){
-                    myXhr.upload.addEventListener('progress',progress, false);
-                }
-                return myXhr;
-            },            
-            contentType: false,
-            processData: false
-        })
-            .done(function(response) {
-                console.log(response);
-                //show result
-                if (response.status == 'OK') {                  
-                } else if (response.status == 'FAIL') {
-
-                } else {
-                    //show default message
-                }
-            })
-            .fail(function(jqXHR) {
-                if (jqXHR.status == 403) {
-                    window.location = '/';
-                } else {
-                    console.log(jqXHR);
-
-                }
-            });
-
-      });    
-
-      function progress(e){
-
-        if(e.lengthComputable){
-            var max = e.total;
-            var current = e.loaded;
-
-            var Percentage = (current * 100)/max;
-            console.log(Percentage);
-
-
-            if(Percentage >= 100)
-            {
-              // process completed  
-            }
-        }  
-    }      */  
+      } 
 </script>
 
 <script async defer

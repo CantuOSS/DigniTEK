@@ -1,5 +1,4 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Query;
@@ -23,11 +22,11 @@ class TekTable extends Table
             ->notEmpty('nombre')
 
             ->requirePresence('descripcion')
-            ->notEmpty('descripcion')              
-            
+            ->notEmpty('descripcion')     
+
             ->requirePresence('categoria_tek_idcategoria_tek')
-            ->notEmpty('categoria_tek_idcategoria_tek');                     
-            
+            ->notEmpty('categoria_tek_idcategoria_tek');     
+                            
         return $validator;
     }    
 
@@ -35,7 +34,6 @@ class TekTable extends Table
     {
         $user = $options['usuario'];
         $post = $options['post'];
-        //$this->log("usuario valido para edicion: " . $user['idusuario'] . ", resultado: " . $query->where(['usuario_idusuario' => $user['idusuario']]), 'debug');
         $res = $this->find('all')->where(['idtek' => $post, 'usuario_idusuario' => $user['idusuario']]);
         $valido = false;
         $cont = 0;

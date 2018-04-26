@@ -16,7 +16,6 @@
                         </div>
                         <br>
                     <?php } ?>
-
                     <!-- formulario para agregar comentario -->
                     <div class="row" style="border-width:1px;border-color:black;border-style:solid;border-radius:5px;padding:10px;">
                         <div class="col-sm-12 col-md-4" align="center">

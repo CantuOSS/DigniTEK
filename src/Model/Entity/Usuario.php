@@ -1,7 +1,7 @@
 <?php
 namespace App\Model\Entity;
 
-use Cake\Auth\DefaultPasswordHasher; // Add this line
+use Cake\Auth\DefaultPasswordHasher;
 use Cake\ORM\Entity;
 
 class Usuario extends Entity
@@ -12,7 +12,6 @@ class Usuario extends Entity
         'id' => false,
     ];
 
-    // Add this method
     protected function _setPassword($value)
     {
         if (strlen($value)) {

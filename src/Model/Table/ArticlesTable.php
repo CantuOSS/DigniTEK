@@ -1,9 +1,7 @@
 <?php
-// src/Model/Table/ArticlesTable.php
 namespace App\Model\Table;
 
 use Cake\ORM\Table;
-// the Text class
 use Cake\Utility\Text;
 
 use Cake\Validation\Validator;
@@ -19,7 +17,6 @@ class ArticlesTable extends Table
     {
         if ($entity->isNew() && !$entity->id) {
             $sluggedTitle = Text::slug($entity->titulo);
-            // trim slug to maximum length defined in schema
             $entity->id = substr($sluggedTitle, 0, 191);
         }
     }    
@@ -30,12 +27,11 @@ class ArticlesTable extends Table
             ->notEmpty('titulo')
             ->minLength('titulo', 10)
             ->maxLength('titulo', 255)
-    
+
             ->notEmpty('contenido')
             ->minLength('contenido', 10)
-
+            
             ->notEmpty('fecha');
-    
         return $validator;
     }    
 }
